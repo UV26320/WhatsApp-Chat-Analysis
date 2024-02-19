@@ -1,6 +1,6 @@
 import streamlit as st
-import preprocessor
-import helper
+import preprocessor,helper
+import matplotlib.pyplot as plt
 
 st.sidebar.title("WhatsApp Chat Analyzer")
 
@@ -11,7 +11,7 @@ if uploaded_file is not None:
     data = bytes_data.decode("utf-8")
     df = preprocessor.preprocess(data)
 
-    st.dataframe(df)
+    # st.dataframe(df)
 
     # fetch unique users
     user_list = df['user'].unique().tolist()
@@ -23,7 +23,7 @@ if uploaded_file is not None:
 
     if st.sidebar.button('Show Analysis'):
         num_messages,words,num_media_messages,num_links= helper.fetch_stats(selected_user, df)
-
+        st.title("Top Statistics")
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
@@ -36,9 +36,24 @@ if uploaded_file is not None:
             st.title(words)
 
         with col3:
-            st.header("Total Media")
+            st.header("Media Shared")
             st.title(num_media_messages)
 
-        with col3:
-            st.header("Total Shared Links")
+        with col4:
+            st.header("Links Shared")
             st.title(num_links)
+
+        # finding the busiest users in the group(Group level)
+        if selected_user == 'Overall':
+                st.title('Most Busy Users')
+                x, new_df = helper.most_busy_users(df)
+                fig, ax = plt.subplots()
+
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    ax.bar(x.index, x.values, color='red')
+                    plt.xticks(rotation='vertical')
+                    st.pyplot(fig)
+                with col2:
+                    st.dataframe(new_df)
