@@ -22,7 +22,7 @@ if uploaded_file is not None:
     selected_user = st.sidebar.selectbox('show analysis wrt', user_list)
 
     if st.sidebar.button('Show Analysis'):
-        num_messages = helper.fetch_stats(selected_user, df)
+        num_messages,words,num_media_messages,num_links= helper.fetch_stats(selected_user, df)
 
         col1, col2, col3, col4 = st.columns(4)
 
@@ -30,3 +30,15 @@ if uploaded_file is not None:
             st.header("Total Messages")
             # Add content or analysis related to total messages here
             st.title(num_messages)
+
+        with col2:
+            st.header("Total Words")
+            st.title(words)
+
+        with col3:
+            st.header("Total Media")
+            st.title(num_media_messages)
+
+        with col3:
+            st.header("Total Shared Links")
+            st.title(num_links)
