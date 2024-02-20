@@ -44,6 +44,14 @@ if uploaded_file is not None:
             st.header("Links Shared")
             st.title(num_links)
 
+        # monthly timeline
+        st.title("Monthly Timeline")
+        timeline = helper.monthly_timeline(selected_user, df)
+        fig, ax = plt.subplots()
+        ax.plot(timeline['time'], timeline['message'], color='blue')
+        plt.xticks(rotation='vertical')
+        st.pyplot(fig)
+
         # finding the busiest users in the group(Group level)
         if selected_user == 'Overall':
                 st.title('Most Busy Users')
