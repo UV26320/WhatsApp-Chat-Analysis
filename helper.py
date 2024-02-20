@@ -6,7 +6,6 @@ import emoji  # emoji version (emoji==1.7.0)
 
 extract = URLExtract()
 
-
 def fetch_stats(selected_user,df):
 
     if selected_user != 'Overall':
@@ -111,3 +110,12 @@ def monthly_timeline(selected_user,df):
     timeline['time'] = time
 
     return timeline
+
+def daily_timeline(selected_user,df):
+
+    if selected_user != 'Overall':
+        df = df[df['user'] == selected_user]
+
+    daily_timeline = df.groupby('only_date').count()['message'].reset_index()
+
+    return daily_timeline
